@@ -3,20 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dshirely <dshirely@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/29 19:15:40 by dshirely          #+#    #+#             */
-/*   Updated: 2022/04/29 19:15:41 by dshirely         ###   ########.fr       */
+/*   Created: 2022/05/14 18:40:44 by lblackth          #+#    #+#             */
+/*   Updated: 2022/05/15 19:56:44 by lblackth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-int main(int argc, char **argv, char **env)
+
+void	term_str(void)
 {
+	printf("minishell%% ");
+}
 
-	while(1)
+int	main(int argc, char **argv, char **env)
+{
+	char	*str;
+
+	while (1)
 	{
-
+		term_str();
+		scanf("%s", str);
+		printf("\n%s\n", str);
 	}
-	return (0);
 }

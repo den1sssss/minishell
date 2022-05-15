@@ -3,25 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dshirely <dshirely@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/29 19:15:36 by dshirely          #+#    #+#             */
-/*   Updated: 2022/04/29 19:15:37 by dshirely         ###   ########.fr       */
+/*   Created: 2022/04/24 21:17:47 by lblackth          #+#    #+#             */
+/*   Updated: 2022/05/15 19:52:01 by lblackth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# include <unistd.h>
-# include <stdlib.h>
+
+# include "libft/libft.h"
 # include <stdio.h>
-# include <string.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <signal.h>
-# include <errno.h>
-# include <fcntl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <curses.h>
 # include <term.h>
-# include <libft/libft.h>
+# include <fcntl.h>
+# include <sys/types.h>
+
+typedef struct s_atree
+{
+	int				type;
+	void			*act;
+	struct s_atree	*left;
+	struct s_atree	*right;
+}				t_atree;
+
+typedef struct s_comlist
+{
+	char				*cont;
+	struct s_comlist	*next;
+}				t_comlist;
 
 #endif
