@@ -6,7 +6,7 @@
 /*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 21:17:47 by lblackth          #+#    #+#             */
-/*   Updated: 2022/05/15 19:52:01 by lblackth         ###   ########.fr       */
+/*   Updated: 2022/05/16 17:40:09 by lblackth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ typedef struct s_atree
 
 typedef struct s_comlist
 {
-	char				*cont;
+	int					type;
+	char				*str;
 	struct s_comlist	*next;
 }				t_comlist;
 

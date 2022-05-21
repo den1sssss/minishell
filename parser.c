@@ -6,7 +6,7 @@
 /*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 18:40:37 by lblackth          #+#    #+#             */
-/*   Updated: 2022/05/15 19:56:29 by lblackth         ###   ########.fr       */
+/*   Updated: 2022/05/21 19:44:09 by lblackth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,119 @@ t_comlist	*comlist_last(t_comlist *start)
 	return (start);
 }
 
+void	list_insert(t_comlist *tek, int type)
+{
+	t_comlist	*tmp;
+	t_comlist	*new;
+
+	new = (t_comlist *)malloc(sizeof(t_comlist));
+	tmp = tek->next;
+	tek->next = new;
+	new->next = tmp;
+}
+
+void	micro_split(t_comlist *tek, int i, int type)
+{
+	char	*tmp;
+	int		len;
+
+	tmp = tek->str;
+	len = ft_strlen(tmp);
+	tek->str = ft_substr(tmp)
+}
+
+int	str_check(t_comlist *tek)
+{
+	t_comlist	*tmp;
+	int			len;
+
+	len = ft_strlen(tek->str);
+	if (tek->str[len - 1] == '|')
+		micro_split(tek, 1, 4);
+	if (tek->str[len - 1] == '<')
+	{
+		
+	}
+}
+
+int	space_skip(char *str, int i)
+{
+	while (ft_isspace(str[i]) && str[i])
+		++i;
+	return (i);
+}
+
+int	skip_to_space(char *str, int i)
+{
+	while (!ft_isspace(str[i + 1]) && str[i])
+		++i;
+	return (i);
+}
+
+void	ccont_split(char *str, int *i, t_comlist *tek)
+{
+	int	j;
+
+	if (str[*i] == '\'')
+	{
+		tek->type == 7;
+		j = *i + 1;
+		*i = squot_ind(str, *i);
+		tek->str = ft_substr(str, j, *i - j);
+	}
+	else if (str[*i] == '\"')
+	{
+		tek->type == 8;
+		j = *i + 1;
+		*i = dquot_ind(str, *i);
+		tek->str = ft_substr(str, j, *i - j);
+	}
+	else
+	{
+		tek->type = 9;
+		j = *i;
+		*i = skip_to_space(str, *i);
+		tek->str = ft_substr(str, j, *i - j + 1);
+	}
+}
+
+void	cont_split(char *str, int *i, t_comlist *tek)
+{
+	int	j;
+
+	if (str[*i] == '>')
+	{
+		tek->type = 2;
+		if (str[*i + 1] == '>')
+		{
+			++(*i);
+			tek->type++;
+		}
+	}
+	else if (str[*i] == '|')
+		tek->type = 4;
+	else if (str[*i] == '$')
+	{
+		tek->type = 5;
+		if (str[*i + 1] == '?')
+			++(*i);
+		else if (!ft_isspace(str[*i + 1]))
+		{
+			j = *i;
+			tek->type++;
+			*i = skip_to_space(str, *i);
+			tek->str = ft_substr(str, j, i - j + 1);
+		}
+	}
+	else
+		ccont_split(str, i, tek);
+}
+
 t_comlist	*ms_split(char *str)
 {
 	t_comlist	*main;
 	t_comlist	*tek;
 	int			i;
-	int			j;
 
 	main = (t_comlist *)malloc(sizeof(t_comlist));
 	main->next = NULL;
@@ -90,16 +197,17 @@ t_comlist	*ms_split(char *str)
 	{
 		if (str[i] == '<')
 		{
-			++i;
-			if (str[i] == '<')
+			tek->type = 0;
+			if (str[i + 1] == '<')
 			{
 				++i;
-				tek->cont = ft_strdup("<<");
+				tek->type++;
 			}
-			else
-				tek->cont = ft_strdup("<");
 		}
-		if ()
+		else
+			cont_split(str, &i, tek);
+		++i;
+		i = space_skip(str, i);
 		tek = (t_comlist *)malloc(sizeof(t_comlist));
 		comlist_last(main)->next = tek;
 	}
