@@ -6,7 +6,7 @@
 /*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 21:17:47 by lblackth          #+#    #+#             */
-/*   Updated: 2022/05/16 17:40:09 by lblackth         ###   ########.fr       */
+/*   Updated: 2022/05/27 22:11:29 by lblackth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,20 @@ typedef struct s_comlist
 	char				*str;
 	struct s_comlist	*next;
 }				t_comlist;
+
+int			dquot_ind(char *str, int i);
+int			squot_ind(char *str, int i);
+char		**arr_join(char **arr_f, char **arr_s);
+int			ft_isspace(int c);
+t_comlist	*comlist_last(t_comlist *start);
+void		list_insert(t_comlist *tek, int type);
+void		micro_split(t_comlist *tek, int i, int type);
+int			str_check(t_comlist *tek);
+int			space_skip(char *str, int i);
+int			skip_to_space(char *str, int i);
+void		ccont_split(char *str, int *i, t_comlist *tek);
+void		cont_split(char *str, int *i, t_comlist *tek);
+t_comlist	*ms_split(char *str);
+void		str_func(t_comlist **tek);
 
 #endif

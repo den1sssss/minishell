@@ -6,7 +6,7 @@
 /*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 18:40:37 by lblackth          #+#    #+#             */
-/*   Updated: 2022/05/21 19:44:09 by lblackth         ###   ########.fr       */
+/*   Updated: 2022/05/27 22:13:08 by lblackth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ int	squot_ind(char *str, int i)
 	return (i);
 }
 
-char	*arr_join(char **arr_f, char **arr_s)
+char	**arr_join(char **arr_f, char **arr_s)
 {
 	int		i;
 	int		j;
-	char	*arr;
+	char	**arr;
 
 	i = 0;
 	j = 0;
@@ -44,7 +44,7 @@ char	*arr_join(char **arr_f, char **arr_s)
 		++i;
 	while (arr_s[j])
 		++j;
-	arr = (char *)malloc(i + j + 1);
+	arr = (char **)malloc(i + j + 1);
 	i = 0;
 	j = 0;
 	while (arr_f[i])
@@ -93,7 +93,9 @@ void	micro_split(t_comlist *tek, int i, int type)
 
 	tmp = tek->str;
 	len = ft_strlen(tmp);
-	tek->str = ft_substr(tmp)
+	tek->str = ft_substr(tmp, 0, len - i);
+	free(tmp);
+	list_insert(tek, type);
 }
 
 int	str_check(t_comlist *tek)
@@ -104,10 +106,16 @@ int	str_check(t_comlist *tek)
 	len = ft_strlen(tek->str);
 	if (tek->str[len - 1] == '|')
 		micro_split(tek, 1, 4);
-	if (tek->str[len - 1] == '<')
+	else if (tek->str[len - 1] == '>')
 	{
-		
+		if (tek->str[len - 2] == '>')
+			micro_split(tek, 2, 3);
+		else
+			micro_split(tek, 1, 2);
 	}
+	else
+		return (0);
+	return (1);
 }
 
 int	space_skip(char *str, int i)
@@ -124,20 +132,26 @@ int	skip_to_space(char *str, int i)
 	return (i);
 }
 
+void	str_func(t_comlist **tek)
+{
+	while (str_check(*tek)) {;}
+	*tek = comlist_last(*tek);
+}
+
 void	ccont_split(char *str, int *i, t_comlist *tek)
 {
 	int	j;
 
 	if (str[*i] == '\'')
 	{
-		tek->type == 7;
+		tek->type = 7;
 		j = *i + 1;
 		*i = squot_ind(str, *i);
 		tek->str = ft_substr(str, j, *i - j);
 	}
 	else if (str[*i] == '\"')
 	{
-		tek->type == 8;
+		tek->type = 8;
 		j = *i + 1;
 		*i = dquot_ind(str, *i);
 		tek->str = ft_substr(str, j, *i - j);
@@ -176,7 +190,7 @@ void	cont_split(char *str, int *i, t_comlist *tek)
 			j = *i;
 			tek->type++;
 			*i = skip_to_space(str, *i);
-			tek->str = ft_substr(str, j, i - j + 1);
+			tek->str = ft_substr(str, j, *i - j + 1);
 		}
 	}
 	else
@@ -211,4 +225,5 @@ t_comlist	*ms_split(char *str)
 		tek = (t_comlist *)malloc(sizeof(t_comlist));
 		comlist_last(main)->next = tek;
 	}
+	return (main);
 }

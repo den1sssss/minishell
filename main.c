@@ -6,25 +6,28 @@
 /*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 18:40:44 by lblackth          #+#    #+#             */
-/*   Updated: 2022/05/15 19:56:44 by lblackth         ###   ########.fr       */
+/*   Updated: 2022/05/27 22:18:06 by lblackth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	term_str(void)
-{
-	printf("minishell%% ");
-}
-
 int	main(int argc, char **argv, char **env)
 {
-	char	*str;
+	char		*str;
+	t_comlist	*list;
 
-	while (1)
+	scanf("%s", str);
+	printf("\n\n");
+	list = ms_split(str);
+	while (list)
 	{
-		term_str();
-		scanf("%s", str);
-		printf("\n%s\n", str);
+		if (list->type != 9)
+			printf("%d ", list->type);
+		else
+			printf("%s", list->str);
+		printf("\n");
+		list = list->next;
 	}
+	return (0);
 }
