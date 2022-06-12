@@ -3,70 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dshirely <dshirely@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/15 19:15:41 by dshirely          #+#    #+#             */
-/*   Updated: 2021/10/17 11:35:26 by dshirely         ###   ########.fr       */
+/*   Created: 2021/10/18 19:02:21 by lblackth          #+#    #+#             */
+/*   Updated: 2021/10/18 19:03:53 by lblackth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	reverse(char *s, int len)
+static int	powww10(int n)
 {
-	int		i;
-	char	c;
+	int	s;
 
-	i = 0;
-	while (i < len / 2)
-	{
-		c = s[i];
-		s[i] = s[len - i - 1];
-		s[len - i - 1] = c;
-		i++;
-	}
+	s = 1;
+	while (n--)
+		s *= 10;
+	return (s);
 }
 
-static int	dlina(int n)
+static int	d_len(int n)
 {
-	int	i;
+	int	len;
 
-	i = 0;
+	len = 0;
 	if (n <= 0)
-		i++;
+		len++;
 	while (n)
 	{
-		i++;
 		n /= 10;
+		len++;
 	}
-	return (i);
+	return (len);
 }
 
 char	*ft_itoa(int n)
 {
-	char	*kek;
-	int		i;
-	int		znak;
 	int		len;
+	int		zn;
+	char	*arr;
+	int		tlen;
 
-	i = 0;
-	len = dlina(n);
-	kek = (char *)malloc(len + 1);
-	if (!kek)
+	zn = 1;
+	len = d_len(n);
+	arr = (char *)malloc(len + 1);
+	if (!arr)
 		return (NULL);
-	znak = 1;
+	arr[len] = 0;
+	tlen = len;
 	if (n < 0)
-		znak = -1;
-	if (!n)
-		kek[i++] = '0';
-	while (n)
 	{
-		kek[i++] = (n % 10) * znak + '0';
-		n /= 10;
+		zn = -1;
+		len--;
+		arr[0] = '-';
 	}
-	if (znak < 0)
-		kek[i++] = '-';
-	reverse(kek, len);
-	kek[i] = '\0';
-	return (kek);
+	while (len--)
+		arr[tlen - len - 1] = ((n / powww10(len)) % 10) * zn + '0';
+	return (arr);
 }
