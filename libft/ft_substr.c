@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dshirely <dshirely@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/15 19:16:46 by dshirely          #+#    #+#             */
-/*   Updated: 2021/10/20 18:10:47 by dshirely         ###   ########.fr       */
+/*   Created: 2021/10/18 19:03:07 by lblackth          #+#    #+#             */
+/*   Updated: 2021/10/23 18:10:51 by lblackth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,24 @@
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*kek;
+	char	*dst;
 	size_t	i;
 
 	if (!s)
 		return (NULL);
-	i = 0;
-	if (!len || start >= ft_strlen(s))
+	if (start >= ft_strlen(s))
 		return (ft_strdup(""));
 	if (ft_strlen(s + start) < len)
 		len = ft_strlen(s + start);
-	kek = (char *)malloc(len + 1);
-	if (!kek)
+	i = 0;
+	dst = (char *)malloc(len + 1);
+	if (!dst)
 		return (NULL);
 	while (i < len)
 	{
-		kek[i] = s[i + start];
+		dst[i] = s[start + i];
 		i++;
-	}	
-	kek[i] = '\0';
-	return (kek);
+	}
+	dst[i] = 0;
+	return (dst);
 }
