@@ -3,38 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dshirely <dshirely@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/15 19:16:42 by dshirely          #+#    #+#             */
-/*   Updated: 2021/10/20 21:07:13 by dshirely         ###   ########.fr       */
+/*   Created: 2021/10/18 19:03:04 by lblackth          #+#    #+#             */
+/*   Updated: 2021/10/20 20:56:20 by lblackth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	*ultrakek(const char *haystack, const char *needle, size_t len)
+static char	*dop(const char *haystack, const char *needle, size_t len)
 {
 	int	i;
 	int	j;
-	int	lenn;
-	int	lenh;
+	int	ln;
+	int	lh;
 	int	tlen;
 
-	lenn = ft_strlen(needle);
-	lenh = ft_strlen(haystack);
+	ln = ft_strlen(needle);
+	lh = ft_strlen(haystack);
 	i = 0;
-	tlen = len - lenn + 1;
-	while (i < lenh - lenn + 2 && tlen--)
+	tlen = len - ln + 1;
+	while (i < lh - ln + 2 && tlen--)
 	{
 		j = 0;
-		while (j < lenn)
+		while (j < ln)
 		{
 			if (needle[j] == haystack[i + j])
 				j++;
 			else
 				break ;
 		}
-		if (j == lenn)
+		if (j == ln)
 			return ((char *)&haystack[i]);
 		i++;
 	}
@@ -43,9 +43,9 @@ static void	*ultrakek(const char *haystack, const char *needle, size_t len)
 
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
-	if (*needle == '\0')
+	if (!(*needle))
 		return ((char *)haystack);
-	if (len == 0)
+	if (!len)
 		return (NULL);
-	return (ultrakek(haystack, needle, len));
+	return (dop(haystack, needle, len));
 }

@@ -3,59 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dshirely <dshirely@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/15 19:16:22 by dshirely          #+#    #+#             */
-/*   Updated: 2021/10/17 14:10:36 by dshirely         ###   ########.fr       */
+/*   Created: 2021/10/18 19:02:45 by lblackth          #+#    #+#             */
+/*   Updated: 2021/10/20 19:27:32 by lblackth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	stepen(int n)
+static int	powww10(int n)
 {
 	int	s;
 
 	s = 1;
-	while (n)
-	{
+	while (n--)
 		s *= 10;
-		n--;
-	}
 	return (s);
 }
 
-static int	len(int n)
+static int	d_len(int n)
 {
-	int	i;
+	int	len;
 
-	i = 0;
-	if (!n)
-		return (1);
+	len = 0;
+	if (n == 0)
+		len++;
 	while (n)
 	{
-		i++;
 		n /= 10;
+		len++;
 	}
-	return (i);
+	return (len);
 }
 
 void	ft_putnbr_fd(int n, int fd)
 {
-	int	znak;
-	int	dlina;
+	int	zn;
+	int	len;
 	int	temp;
 
-	znak = 1;
+	zn = 1;
 	if (n < 0)
 	{
-		znak = -1;
+		zn = -1;
 		write(fd, "-", 1);
 	}
-	dlina = len(n);
-	while (dlina--)
+	len = d_len(n);
+	while (len--)
 	{
-		temp = ((n / stepen(dlina)) % 10) * znak + '0';
+		temp = ((n / powww10(len)) % 10) * zn + '0';
 		write(fd, &temp, 1);
 	}
 }

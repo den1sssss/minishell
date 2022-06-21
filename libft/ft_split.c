@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dshirely <dshirely@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/15 19:16:25 by dshirely          #+#    #+#             */
-/*   Updated: 2021/10/20 20:12:06 by dshirely         ###   ########.fr       */
+/*   Created: 2021/10/18 19:02:48 by lblackth          #+#    #+#             */
+/*   Updated: 2021/10/20 19:36:06 by lblackth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	*ft_ochistka(char **arr)
+static void	*ft_clear(char **arr)
 {
 	int	i;
 
@@ -23,14 +23,14 @@ static void	*ft_ochistka(char **arr)
 	return (NULL);
 }
 
-static int	sledslovo(char const *s, char c, int i)
+static int	next(const char *s, char c, int i)
 {
 	while (s[i] == c && s[i])
 		i++;
 	return (i);
 }
 
-static int	kolvoslov(char const *s, char c)
+static int	words(const char *s, char c)
 {
 	int	count;
 	int	i;
@@ -39,18 +39,18 @@ static int	kolvoslov(char const *s, char c)
 		return (0);
 	i = 0;
 	count = 0;
-	i = sledslovo(s, c, i);
+	i = next(s, c, i);
 	while (s[i])
 	{
 		while (s[i] && s[i] != c)
 			i++;
-		i = sledslovo(s, c, i);
+		i = next(s, c, i);
 		count++;
 	}
 	return (count);
 }
 
-static int	dlina_slova(char const *s, char c, int start)
+static int	word_len(const char *s, char c, int start)
 {
 	int	i;
 
@@ -69,7 +69,7 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	count = kolvoslov(s, c);
+	count = words(s, c);
 	arr = (char **)malloc((count + 1) * sizeof(char *));
 	if (!arr)
 		return (NULL);
@@ -77,10 +77,10 @@ char	**ft_split(char const *s, char c)
 	start = 0;
 	while (++i < count)
 	{
-		start = sledslovo(s, c, start);
-		arr[i] = ft_substr(s, start, dlina_slova(s, c, start));
+		start = next(s, c, start);
+		arr[i] = ft_substr(s, start, word_len(s, c, start));
 		if (!arr[i])
-			return (ft_ochistka(arr));
+			return (ft_clear(arr));
 		while (s[start] && s[start] != c)
 			start++;
 	}

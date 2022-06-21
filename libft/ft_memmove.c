@@ -3,30 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dshirely <dshirely@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/15 19:16:17 by dshirely          #+#    #+#             */
-/*   Updated: 2021/10/17 11:43:09 by dshirely         ###   ########.fr       */
+/*   Created: 2021/10/18 19:02:40 by lblackth          #+#    #+#             */
+/*   Updated: 2021/10/20 19:40:07 by lblackth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	*ft_memmove(void *dst, const void *src, size_t n)
 {
-	unsigned char	*kek;
-	unsigned char	*lel;
+	unsigned char	*d;
+	unsigned char	*dst1;
+	unsigned char	*s;
 	size_t			i;
 
-	kek = (unsigned char *)dest;
-	lel = (unsigned char *)src;
-	i = 0;
-	if (dest <= src)
-		ft_memcpy(dest, src, n);
+	if (!src && !dst)
+		return (NULL);
+	if (src < dst)
+		return (ft_memcpy(dst, src, n));
 	else
 	{
-		while (--n + 1)
-			kek[n] = lel[n];
+		d = (unsigned char *)dst;
+		dst1 = d;
+		s = (unsigned char *)src;
+		i = 0;
+		while (i < n)
+		{
+			*d++ = *s++;
+			i++;
+		}
 	}
-	return (kek);
+	return (dst1);
 }
