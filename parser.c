@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lblackth <lblackth@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/14 18:40:37 by lblackth          #+#    #+#             */
-/*   Updated: 2022/05/27 22:13:08 by lblackth         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 int	dquot_ind(char *str, int i)
@@ -32,35 +20,6 @@ int	squot_ind(char *str, int i)
 	return (i);
 }
 
-char	**arr_join(char **arr_f, char **arr_s)
-{
-	int		i;
-	int		j;
-	char	**arr;
-
-	i = 0;
-	j = 0;
-	while (arr_f[i])
-		++i;
-	while (arr_s[j])
-		++j;
-	arr = (char **)malloc(i + j + 1);
-	i = 0;
-	j = 0;
-	while (arr_f[i])
-	{
-		arr[i] = arr_f[i];
-		++i;
-	}
-	while (arr_s[j])
-	{
-		arr[j + i] = arr_s[j];
-		++j;
-	}
-	arr[j + i] = NULL;
-	return (arr);
-}
-
 int	ft_isspace(int c)
 {
 	if ((c > 8 && c < 14) || c == 32)
@@ -75,12 +34,27 @@ t_comlist	*comlist_last(t_comlist *start)
 	return (start);
 }
 
+void	add_node(t_comlist **start, int type, char *str)
+{
+	t_comlist	*new;
+	
+	new = (t_comlist *)malloc(sizeof(t_comlist *));
+	new->next = NULL;
+	new->str = str;
+	new->type = type;
+	if (!*start)
+		*start = new;
+	else
+		comlist_last(*start)->next = new;
+}
+
 void	list_insert(t_comlist *tek, int type)
 {
 	t_comlist	*tmp;
 	t_comlist	*new;
 
 	new = (t_comlist *)malloc(sizeof(t_comlist));
+	new->type = type;
 	tmp = tek->next;
 	tek->next = new;
 	new->next = tmp;
@@ -100,7 +74,6 @@ void	micro_split(t_comlist *tek, int i, int type)
 
 int	str_check(t_comlist *tek)
 {
-	t_comlist	*tmp;
 	int			len;
 
 	len = ft_strlen(tek->str);
@@ -127,103 +100,96 @@ int	space_skip(char *str, int i)
 
 int	skip_to_space(char *str, int i)
 {
-	while (!ft_isspace(str[i + 1]) && str[i])
+	while (!ft_isspace(str[i + 1]) && str[i + 1])
 		++i;
 	return (i);
 }
 
-void	str_func(t_comlist **tek)
-{
-	while (str_check(*tek)) {;}
-	*tek = comlist_last(*tek);
-}
-
-void	ccont_split(char *str, int *i, t_comlist *tek)
+void	ccont_split(char *str, int *i, t_comlist **main)
 {
 	int	j;
 
 	if (str[*i] == '\'')
 	{
-		tek->type = 7;
+		add_node(main, 7, NULL);
 		j = *i + 1;
 		*i = squot_ind(str, *i);
-		tek->str = ft_substr(str, j, *i - j);
+		comlist_last(*main)->str = ft_substr(str, j, *i - j);
 	}
 	else if (str[*i] == '\"')
 	{
-		tek->type = 8;
+		add_node(main, 8, NULL);
 		j = *i + 1;
 		*i = dquot_ind(str, *i);
-		tek->str = ft_substr(str, j, *i - j);
+		comlist_last(*main)->str = ft_substr(str, j, *i - j);
 	}
 	else
 	{
-		tek->type = 9;
+		add_node(main, 9, NULL);
 		j = *i;
 		*i = skip_to_space(str, *i);
-		tek->str = ft_substr(str, j, *i - j + 1);
+		comlist_last(*main)->str = ft_substr(str, j, *i - j + 1);
 	}
 }
 
-void	cont_split(char *str, int *i, t_comlist *tek)
+void	cont_split(char *str, int *i, t_comlist **main)
 {
 	int	j;
 
 	if (str[*i] == '>')
 	{
-		tek->type = 2;
 		if (str[*i + 1] == '>')
 		{
 			++(*i);
-			tek->type++;
+			add_node(main, 3, NULL);
 		}
+		else
+			add_node(main, 2, NULL);
 	}
 	else if (str[*i] == '|')
-		tek->type = 4;
+		add_node(main, 4, NULL);
 	else if (str[*i] == '$')
 	{
-		tek->type = 5;
 		if (str[*i + 1] == '?')
-			++(*i);
+			add_node(main, 5, NULL);
 		else if (!ft_isspace(str[*i + 1]))
 		{
 			j = *i;
-			tek->type++;
+			add_node(main, 6, NULL);
 			*i = skip_to_space(str, *i);
-			tek->str = ft_substr(str, j, *i - j + 1);
+			comlist_last(*main)->str = ft_substr(str, j, *i - j + 1);
 		}
+		// else
+		// 	ft_exit(2);
 	}
 	else
-		ccont_split(str, i, tek);
+		ccont_split(str, i, main);
 }
 
 t_comlist	*ms_split(char *str)
 {
 	t_comlist	*main;
-	t_comlist	*tek;
 	int			i;
 
-	main = (t_comlist *)malloc(sizeof(t_comlist));
-	main->next = NULL;
-	tek = main;
+	main = NULL;
 	i = 0;
+	i = space_skip(str, i);
 	while (str[i])
 	{
 		if (str[i] == '<')
 		{
-			tek->type = 0;
 			if (str[i + 1] == '<')
 			{
 				++i;
-				tek->type++;
+				add_node(&main, 1, NULL);
 			}
+			else
+				add_node(&main, 0, NULL);
 		}
 		else
-			cont_split(str, &i, tek);
+			cont_split(str, &i, &main);
 		++i;
 		i = space_skip(str, i);
-		tek = (t_comlist *)malloc(sizeof(t_comlist));
-		comlist_last(main)->next = tek;
 	}
 	return (main);
 }
