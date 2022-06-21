@@ -48,25 +48,26 @@ void	ms_loop(void)
 	char		*tmp;
 	t_comlist	*list;
 
-	tmp = prompt();
-	str = readline(tmp);
-	free(tmp);
 	while (1)
 	{
+		signal(SIGINT, ft_ctrlc);
+		tmp = prompt();
+		str = readline(tmp);
+		free(tmp);
 		list = ms_split(str);
-		printf("\n%p   %p\n", list, list->next);
-		str = readline(prompt());
-		while (list)
+		if (list)
 		{
-			if (list->type < 7)
-				printf("%d\n", list->type);
-			else
-				printf("%d %s\n", list->type, list->str);
-			list = list->next;
+			printf("\n%p   %p\n", list, list->next);
+			while (list)
+			{
+				if (list->type < 7)
+					printf("%d\n", list->type);
+				else
+					printf("%d %s\n", list->type, list->str);
+				list = list->next;
+			}
 		}
-		str = readline(prompt());
 	}
-	printf("\n121\n");
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -74,7 +75,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	envp_copy(envp);
-	signal(SIGINT, ft_ctrlc);
 	ms_loop();
 	return (0);
 }

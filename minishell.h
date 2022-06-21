@@ -41,5 +41,6 @@ void		str_func(t_comlist **tek);
 void		ccont_split(char *str, int *i, t_comlist **tek);
 void		cont_split(char *str, int *i, t_comlist **tek);
 t_comlist	*ms_split(char *str);
+void		ms_loop(void);
 
 #endif
