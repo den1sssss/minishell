@@ -42,6 +42,25 @@ char	*prompt(void)
 	return (str);
 }
 
+t_comlist	*skip_to_pipe(t_comlist *list)
+{
+	t_comlist	*tmp;
+
+	while (list && list->type != 4)
+	{
+		tmp = list;
+		list = list->next;
+		free(tmp);
+	}
+	if (list->type == 4)
+	{
+		tmp = list;
+		list = list->next;
+		free(tmp);
+	}
+	return (list);
+}
+
 void	ms_loop(void)
 {
 	char		*str;
@@ -55,17 +74,10 @@ void	ms_loop(void)
 		str = readline(tmp);
 		free(tmp);
 		list = ms_split(str);
-		if (list)
+		while (list)
 		{
-			printf("\n%p   %p\n", list, list->next);
-			while (list)
-			{
-				if (list->type < 7)
-					printf("%d\n", list->type);
-				else
-					printf("%d %s\n", list->type, list->str);
-				list = list->next;
-			}
+			parse_exec(list);
+			list = skip_to_pipe(list);
 		}
 	}
 }
@@ -75,6 +87,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	envp_copy(envp);
+	signal(SIGINT, ft_ctrlc);
 	ms_loop();
 	return (0);
 }
