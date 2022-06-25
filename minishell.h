@@ -13,6 +13,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft/libft.h"
+# include <fcntl.h>
 
 typedef struct s_comlist
 {
@@ -21,6 +22,13 @@ typedef struct s_comlist
 	struct s_comlist	*next;
 }				t_comlist;
 
+typedef struct s_info
+{
+	int std_r;
+	int std_w;
+	int fork;
+	int b_red;
+} 				t_info;
 char	**g_envp;
 
 void		envp_copy(char **envp);

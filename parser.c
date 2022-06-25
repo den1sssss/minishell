@@ -107,7 +107,7 @@ void	parse_exec(t_comlist *list)
 		list = list->next;
 	}
 	arr = list_to_arr(start);
-	if (list->next->type == 4)
-		sdelay_pipe_plz(&info);
-	execni_plz(arr, &info);
+	// if (list->next->type == 4)
+		// sdelay_pipe_plz(&info);
+	// execni_plz(arr, &info);
 }

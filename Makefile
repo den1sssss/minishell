@@ -8,7 +8,7 @@ CC			=	cc
 
 REMOVE		=	rm -f
 
-CFLAGS		=	-Wall -Werror -Wextra -lreadline
+CFLAGS		=	-Wall -Werror -Wextra 
 
 NAME		=	minishell
 
