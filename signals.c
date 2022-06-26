@@ -2,7 +2,10 @@
 
 void	ft_ctrlc(int signum)
 {
-	(void)signum;
-	printf("\n");
-	ms_loop();
+	if (signum == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }

@@ -13,6 +13,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft/libft.h"
+# include <fcntl.h>
 
 typedef struct s_comlist
 {
@@ -20,6 +21,13 @@ typedef struct s_comlist
 	char				*str;
 	struct s_comlist	*next;
 }				t_comlist;
+
+typedef struct s_info
+{
+	int	std_r;
+	int	std_w;
+	int	fork;
+}				t_info;
 
 char	**g_envp;
 
@@ -41,6 +49,12 @@ void		str_func(t_comlist **tek);
 void		ccont_split(char *str, int *i, t_comlist **tek);
 void		cont_split(char *str, int *i, t_comlist **tek);
 t_comlist	*ms_split(char *str);
-void		ms_loop(void);
+t_comlist	*skip_to_pipe(t_comlist *list);
+void		parse(t_comlist *list, t_info *info);
+char		**list_to_arr(t_comlist *list);
+void		info_init(t_info *info);
+void		d_f_redir(t_comlist *list, t_info *info);
+void		f_redir(t_comlist *list, t_info *info);
+void		b_redir(t_comlist *list, t_info *info);
 
 #endif

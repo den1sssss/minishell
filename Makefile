@@ -1,6 +1,8 @@
-SRCS		=	parser.c \
+SRCS		=	splitter.c \
 				main.c \
-				signals.c
+				signals.c \
+				parser.c \
+				executer.c
 
 OBJ			=	${SRCS:.c=.o}
 
@@ -21,6 +23,7 @@ $(LIBFT):
 			make -C libft/
 $(NAME):	$(OBJ) $(HEADER)
 			$(CC) ${OBJ} -o ${NAME} ${CFLAGS} ${LIBFT}
+			clean
 clean:		
 			@$(REMOVE) $(OBJ)
 			make -C libft/ clean

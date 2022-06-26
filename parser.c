@@ -58,8 +58,8 @@ void	info_init(t_info *info)
 {
 	info->b_red = 0;
 	info->fork = 0;
-	info->std_r = 0;
-	info->std_w = 1;
+	info->std_r = 4;
+	info->std_w = 3;
 }
 
 char	**list_to_arr(t_comlist *list)
@@ -88,26 +88,47 @@ char	**list_to_arr(t_comlist *list)
 	return (arr);
 }
 
-void	parse_exec(t_comlist *list)
+void	set_pipe(t_info *info)
 {
-	t_info		info;
+	int	fd[2];
+
+	pipe(fd);
+	info->std_w = fd[1];
+	info->std_r = fd[0];
+	info->fork = 1;
+}
+
+char	**parse(t_comlist *list, t_info *info)
+{
 	t_comlist	*start;
 	char		**arr;
 
 	start = list;
-	info_init(&info);
-	while (list->next && list->next->type != 4)
+	while (list->next)
 	{
-		if (!list->next->type)
-			b_redir(list, &info);
-		if (list->next->type == 2)
-			f_redir(list, &info);
-		if (list->next->type == 3)
-			d_f_redir(list, &info);
+		if (list->next->type == 4)
+			break ;
+		else if (!list->next->type)
+		{
+			b_redir(list, info);
+			continue;
+		}
+		else if (list->next->type == 2)
+		{
+			f_redir(list, info);
+			continue;
+		}
+		else if (list->next->type == 3)
+		{
+			d_f_redir(list, info);
+			continue;
+		}
 		list = list->next;
+		if (!list)
+			break ;
 	}
 	arr = list_to_arr(start);
 	if (list->next->type == 4)
-		sdelay_pipe_plz(&info);
-	execni_plz(arr, &info);
+		set_pipe(info);
+	return (arr);
 }
