@@ -16,8 +16,8 @@ void printerror(char **arg)
 	else
 		ft_putendl_fd("command not found", STDERR_FILENO);
 	ft_putstr_fd("\e[0m", STDERR_FILENO);
-	// g_status = 1;
 }
+
 int ft_strcmp(const char *str1, const char *str2)
 {
     while(*str1)
@@ -130,7 +130,7 @@ void free_arr(char **arr)
 	free(arr);
 }
 
-char **list_to_arr(t_list *list)
+char	**list_to_arr(t_list *list)
 {
 	char	*temp;
 	char	**array;
@@ -156,13 +156,12 @@ char **list_to_arr(t_list *list)
 	array[i] = NULL;
 	return (array);
 }
-int start(char **arr, t_info info)
+void	execute(char **arr, t_info info)
 {
     pid_t pid;
     int status;
     // char **env;
 
-    errno = 0;
 	// if (exec_builtin(*arg, env_list))
 	// 	return ;
 	// env = list_to_arr(env_list);
@@ -173,12 +172,12 @@ int start(char **arr, t_info info)
 		free(env);
 	}
 	else if (pid < 0)
-		exit(EXIT_FAILURE);
+		exit(1);
 	else
 	{
 		//
-		if (!check_path(arg->argv, env_list))
-			execve(*arg->argv, arg->argv, env);
+		if (!check_path(arr, env_list))
+			execve(*arr, arr, g_envp);
 		exit_with_error(arg);
 	}
 }
@@ -191,7 +190,7 @@ void fork_execute(char **arr, t_info info)
 		execute(arr, info);
 		close(info.std_r);
 		close(STDOUT_FILENO);
-		exit(127);
+		exit(0);
 	}
 	else
 	{
@@ -207,30 +206,3 @@ int is_fork(t_info info)
     return ((info.std_w != 3 || info.std_r != 4) && info.fork);
 }
 //
-
-void execute(char *input,t_list *env_list)
-{
-    t_arguments arguments;
-
-    while(*input)
-    {
-        if(*input==';')
-            input++;
-        else
-        {
-            arginit(&arguments);
-            arguments.argv=parse(&input,env_list,&arguments.fds);
-            //----------------THIS IS MY PART
-            if(arguments.argv)
-            {
-                if(is_fork(arguments.fds))
-                    forking(arguments,env_list);
-                else
-                    start(&arguments,env_list);
-            }
-            //-------------------------
-			free_arr(arguments.argv);
-			free(arguments.argv);
-        }
-    }
-}

@@ -29,6 +29,13 @@ typedef struct s_info
 	int	fork;
 }				t_info;
 
+typedef struct s_envlist
+{
+	char				*key;
+	char				*val;
+	struct s_envlist	*next;
+}				t_envlist;
+
 char	**g_envp;
 
 void		envp_copy(char **envp);
