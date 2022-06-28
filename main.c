@@ -46,17 +46,22 @@ t_comlist	*skip_to_pipe(t_comlist *list)
 {
 	t_comlist	*tmp;
 
-	while (list && list->type != 4)
+	while (list)
 	{
+		if (list->type == 4)
+			break ;
 		tmp = list;
 		list = list->next;
 		free(tmp);
 	}
-	if (list->type == 4)
+	if (list)
 	{
-		tmp = list;
-		list = list->next;
-		free(tmp);
+		if (list->type == 4)
+		{
+			tmp = list;
+			list = list->next;
+			free(tmp);
+		}
 	}
 	return (list);
 }
@@ -66,18 +71,26 @@ void	ms_loop(void)
 	char		*str;
 	char		*tmp;
 	t_comlist	*list;
+	t_info		info;
+	char		**arr;
 
 	while (1)
 	{
-		signal(SIGINT, ft_ctrlc);
 		tmp = prompt();
 		str = readline(tmp);
 		free(tmp);
 		list = ms_split(str);
 		while (list)
 		{
-			parse_exec(list);
+			info_init(&info);
+			arr = parse(list, &info);
 			list = skip_to_pipe(list);
+			if (is_fork(info))
+				fork_execute(arr, info);
+			else
+				execute(arr, info);
+			free_arr(arr);
+			free(arr);
 		}
 	}
 }

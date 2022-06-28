@@ -24,11 +24,24 @@ typedef struct s_comlist
 
 typedef struct s_info
 {
-	int std_r;
-	int std_w;
-	int fork;
-	int b_red;
-} 				t_info;
+	int	std_r;
+	int	std_w;
+	int	fork;
+}				t_info;
+
+typedef struct s_envlist
+{
+	char				*key;
+	char				*val;
+	struct s_envlist	*next;
+}				t_envlist;
+
+typedef struct	s_env
+{
+	char		*key;
+	char		*value;
+}				t_env;
+
 char	**g_envp;
 
 void		envp_copy(char **envp);
@@ -49,6 +62,16 @@ void		str_func(t_comlist **tek);
 void		ccont_split(char *str, int *i, t_comlist **tek);
 void		cont_split(char *str, int *i, t_comlist **tek);
 t_comlist	*ms_split(char *str);
-void		ms_loop(void);
+t_comlist	*skip_to_pipe(t_comlist *list);
+char 		**parse(t_comlist *list, t_info *info);
+char		**list_to_arr(t_list *list);
+void		info_init(t_info *info);
+void		d_f_redir(t_comlist *list, t_info *info);
+void		f_redir(t_comlist *list, t_info *info);
+void		b_redir(t_comlist *list, t_info *info);
+int			is_fork(t_info info);
+void		fork_execute(char **arr, t_info info);
+void		execute(char **arr, t_info info);
+void		free_arr(char **array);
 
 #endif
