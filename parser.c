@@ -56,7 +56,6 @@ void	d_f_redir(t_comlist *list, t_info *info)
 
 void	info_init(t_info *info)
 {
-	info->b_red = 0;
 	info->fork = 0;
 	info->std_r = 4;
 	info->std_w = 3;
@@ -128,7 +127,7 @@ char	**parse(t_comlist *list, t_info *info)
 			break ;
 	}
 	arr = list_to_arr(start);
-	if (list->next->type == 4)
+	if (list && list->next && list->next->type == 4)
 		set_pipe(info);
 	return (arr);
 }
