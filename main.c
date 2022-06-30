@@ -1,32 +1,5 @@
 #include "minishell.h"
 
-void	envp_copy(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-		++i;
-	g_envp = (char **)malloc(sizeof(char *) * i + 1);
-	if (!g_envp)
-	{
-		printf("malloc error");
-		exit(0);
-	}
-	i = 0;
-	while (envp[i])
-	{
-		g_envp[i] = ft_strdup(envp[i]);
-		if (!g_envp[i])
-		{
-			printf("malloc error");
-			exit(0);
-		}
-		i++;
-	}
-	g_envp[i] = NULL;
-}
-
 char	*prompt(void)
 {
 	char	*cwd;
@@ -88,7 +61,7 @@ void	ms_loop(void)
 			if (is_fork(info))
 				fork_execute(arr, info);
 			else
-				execute(arr, info);
+				execute(arr);
 			free_arr(arr);
 			free(arr);
 		}
@@ -99,8 +72,9 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	envp_copy(envp);
+	g_env_list = env_to_list(envp);
 	signal(SIGINT, ft_ctrlc);
+	signal(SIGQUIT, ft_ctrld);
 	ms_loop();
 	return (0);
 }

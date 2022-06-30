@@ -12,7 +12,6 @@
 # include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "libft/libft.h"
 # include <fcntl.h>
 
 typedef struct s_comlist
@@ -36,18 +35,12 @@ typedef struct s_envlist
 	struct s_envlist	*next;
 }				t_envlist;
 
-typedef struct	s_env
-{
-	char		*key;
-	char		*value;
-}				t_env;
-
-char	**g_envp;
+t_envlist	*g_env_list;
 
 void		envp_copy(char **envp);
 char		*prompt(void);
 void		ft_ctrlc(int signum);
-void		ft_exit(int signum);
+void		ft_ctrld(int signum);
 int			dquot_ind(char *str, int i);
 int			squot_ind(char *str, int i);
 char		**arr_join(char **arr_f, char **arr_s);
@@ -63,15 +56,55 @@ void		ccont_split(char *str, int *i, t_comlist **tek);
 void		cont_split(char *str, int *i, t_comlist **tek);
 t_comlist	*ms_split(char *str);
 t_comlist	*skip_to_pipe(t_comlist *list);
-char 		**parse(t_comlist *list, t_info *info);
-char		**list_to_arr(t_list *list);
+char		**parse(t_comlist *list, t_info *info);
+char		**list_to_arr(t_comlist *list);
 void		info_init(t_info *info);
 void		d_f_redir(t_comlist *list, t_info *info);
 void		f_redir(t_comlist *list, t_info *info);
 void		b_redir(t_comlist *list, t_info *info);
+void		ms_echo(char **arr);
+void		ms_pwd(void);
+void		home_exp(char *str);
+void		ms_cd(char **arr);
+void		ms_exit(char **arr);
+void		exp_print(void);
+int			is_valid(char *key);
+void		exp_err(char *key_val);
+int			ms_export(char **arr);
+void		ms_env(void);
+void		unset_env(t_envlist *cur, t_envlist *prev);
+void		env_check(char *str);
+void		ms_unset(char **arr);
+char		*get_val(char *str);
+t_envlist	*new_envlist(char **arr);
+t_envlist	*envlist_last(t_envlist *envlist);
+t_envlist	*env_to_list(char **envp);
+char		**list_to_env(t_envlist *env_list);
+int			 ft_strcmp(const char *str1, const char *str2);
+int 		builtins(char **arr);
+char		*get_current_path(char **paths, char *cur, char *arr);
+char 		**get_paths(void);
+int			check_full_path(const char *s);
+int 		check_path(char **arr);
+void		 free_arr(char **arr);
+void		execute(char **arr);
+void		 fork_execute(char **arr, t_info info);
 int			is_fork(t_info info);
-void		fork_execute(char **arr, t_info info);
-void		execute(char **arr, t_info info);
-void		free_arr(char **array);
+
+
+size_t	ft_strlen(const char *s);
+char	*ft_strdup(const char *s1);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+int	ft_atoi(const char *str);
+int	ft_isalpha(int c);
+int	ft_isdigit(int c);
+int	ft_isalnum(int c);
+void	ft_putstr_fd(char *s, int fd);
+char	*ft_strchr(const char *s, int c);
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	**ft_split(char const *s, char c);
+
+
 
 #endif

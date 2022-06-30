@@ -93,6 +93,10 @@ int	str_check(t_comlist *tek)
 
 int	space_skip(char *str, int i)
 {
+	if (!str)
+		return (i);
+	if (!str[i])
+		return (i);
 	while (ft_isspace(str[i]) && str[i])
 		++i;
 	return (i);
@@ -173,7 +177,6 @@ t_comlist	*ms_split(char *str)
 
 	main = NULL;
 	i = 0;
-	i = space_skip(str, i);
 	while (str[i])
 	{
 		if (str[i] == '<')
