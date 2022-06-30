@@ -1,8 +1,32 @@
-SRCS		=	splitter.c \
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: dshirely <dshirely@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/06/30 14:59:18 by dshirely          #+#    #+#              #
+#    Updated: 2022/06/30 18:06:59 by dshirely         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+SRCS		=	splitter_one.c \
+				splitter_two.c \
 				main.c \
 				signals.c \
 				parser.c \
-				executer.c
+				executer_one.c \
+				executer_two.c \
+				env_one.c \
+				env_two.c \
+				builtins_f.c \
+				builtins_s.c \
+				builtins_t.c \
+				libft_one.c \
+				libft_two.c \
+				ft_split.c \
+				redir.c \
+				utils.c 
 
 OBJ			=	${SRCS:.c=.o}
 
@@ -10,26 +34,20 @@ CC			=	cc
 
 REMOVE		=	rm -f
 
-CFLAGS		=	-Wall -Werror -Wextra -lreadline
+CFLAGS		=	-Wall -Werror -Wextra -g 
 
 NAME		=	minishell
 
-LIBFT		=	libft/libft.a
-
 HEADER		=	minishell.h
 
-all:		$(LIBFT) $(HEADER) $(NAME)
-$(LIBFT):
-			make -C libft/
+all:		 $(HEADER) $(NAME)
+
 $(NAME):	$(OBJ) $(HEADER)
-			$(CC) ${OBJ} -o ${NAME} ${CFLAGS} ${LIBFT}
-			clean
+			 $(CC) ${OBJ} -o ${NAME} ${CFLAGS} -lreadline
 clean:		
 			@$(REMOVE) $(OBJ)
-			make -C libft/ clean
 fclean:		clean
 			@$(REMOVE) $(NAME)
-			make -C libft/ fclean
 
 re:			fclean all
 
