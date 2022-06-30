@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   splitter.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dshirely <dshirely@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/30 14:59:28 by dshirely          #+#    #+#             */
+/*   Updated: 2022/06/30 14:59:28 by dshirely         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	dquot_ind(char *str, int i)
@@ -93,6 +105,10 @@ int	str_check(t_comlist *tek)
 
 int	space_skip(char *str, int i)
 {
+	if (!str)
+		return (i);
+	if (!str[i])
+		return (i);
 	while (ft_isspace(str[i]) && str[i])
 		++i;
 	return (i);
@@ -114,21 +130,21 @@ void	ccont_split(char *str, int *i, t_comlist **main)
 		add_node(main, 7, NULL);
 		j = *i + 1;
 		*i = squot_ind(str, *i);
-		comlist_last(*main)->str = ft_substr(str, j, *i - j);
+		comlist_last(*main)->str = ft_substr(str, j, (*i) - j);
 	}
 	else if (str[*i] == '\"')
 	{
 		add_node(main, 8, NULL);
 		j = *i + 1;
 		*i = dquot_ind(str, *i);
-		comlist_last(*main)->str = ft_substr(str, j, *i - j);
+		comlist_last(*main)->str = ft_substr(str, j, (*i) - j);
 	}
 	else
 	{
 		add_node(main, 9, NULL);
 		j = *i;
 		*i = skip_to_space(str, *i);
-		comlist_last(*main)->str = ft_substr(str, j, *i - j + 1);
+		comlist_last(*main)->str = ft_substr(str, j, (*i) - j + 1);
 	}
 }
 
@@ -159,8 +175,6 @@ void	cont_split(char *str, int *i, t_comlist **main)
 			*i = skip_to_space(str, *i);
 			comlist_last(*main)->str = ft_substr(str, j, *i - j + 1);
 		}
-		// else
-		// 	ft_exit(2);
 	}
 	else
 		ccont_split(str, i, main);
@@ -173,7 +187,6 @@ t_comlist	*ms_split(char *str)
 
 	main = NULL;
 	i = 0;
-	i = space_skip(str, i);
 	while (str[i])
 	{
 		if (str[i] == '<')
