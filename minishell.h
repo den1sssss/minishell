@@ -118,5 +118,6 @@ void		parsing(t_comlist *list, t_info *info);
 void		exporting(char **arr);
 int			sizing(t_envlist *env_list);
 void		add_node(t_comlist **start, int type, char *str);
+void		cont_split_plus(char *str, int *i, t_comlist **main);
 
 #endif

@@ -12,49 +12,6 @@
 
 #include "minishell.h"
 
-void	list_insert(t_comlist *tek, int type)
-{
-	t_comlist	*tmp;
-	t_comlist	*new;
-
-	new = (t_comlist *)malloc(sizeof(t_comlist));
-	new->type = type;
-	tmp = tek->next;
-	tek->next = new;
-	new->next = tmp;
-}
-
-void	micro_split(t_comlist *tek, int i, int type)
-{
-	char	*tmp;
-	int		len;
-
-	tmp = tek->str;
-	len = ft_strlen(tmp);
-	tek->str = ft_substr(tmp, 0, len - i);
-	free(tmp);
-	list_insert(tek, type);
-}
-
-int	str_check(t_comlist *tek)
-{
-	int			len;
-
-	len = ft_strlen(tek->str);
-	if (tek->str[len - 1] == '|')
-		micro_split(tek, 1, 4);
-	else if (tek->str[len - 1] == '>')
-	{
-		if (tek->str[len - 2] == '>')
-			micro_split(tek, 2, 3);
-		else
-			micro_split(tek, 1, 2);
-	}
-	else
-		return (0);
-	return (1);
-}
-
 int	space_skip(char *str, int i)
 {
 	if (!str)
@@ -72,31 +29,47 @@ void	ccont_split(char *str, int *i, t_comlist **main)
 
 	if (str[*i] == '\'')
 	{
-		add_node(main, 7, NULL);
 		j = *i + 1;
 		*i = squot_ind(str, *i);
-		comlist_last(*main)->str = ft_substr(str, j, *i - j);
+		add_node(main, 7, ft_substr(str, j, *i - j));
 	}
 	else if (str[*i] == '\"')
 	{
-		add_node(main, 8, NULL);
 		j = *i + 1;
 		*i = dquot_ind(str, *i);
-		comlist_last(*main)->str = ft_substr(str, j, *i - j);
+		add_node(main, 8, ft_substr(str, j, *i - j));
 	}
 	else
 	{
-		add_node(main, 9, NULL);
 		j = *i;
 		*i = skip_to_space(str, *i);
-		comlist_last(*main)->str = ft_substr(str, j, *i - j + 1);
+		add_node(main, 9, ft_substr(str, j, *i - j + 1));
 	}
+}
+
+void	cont_split_plus(char *str, int *i, t_comlist **main)
+{
+	int	j;
+
+	if (str[*i] == '|')
+		add_node(main, 4, NULL);
+	else if (str[*i] == '$')
+	{
+		if (str[*i + 1] == '?')
+			add_node(main, 5, NULL);
+		else if (!ft_isspace(str[*i + 1]))
+		{
+			j = *i;
+			*i = skip_to_space(str, *i);
+			add_node(main, 6, ft_substr(str, j, *i - j + 1));
+		}
+	}
+	else
+		ccont_split(str, i, main);
 }
 
 void	cont_split(char *str, int *i, t_comlist **main)
 {
-	int	j;
-
 	if (str[*i] == '>')
 	{
 		if (str[*i + 1] == '>')
@@ -107,22 +80,8 @@ void	cont_split(char *str, int *i, t_comlist **main)
 		else
 			add_node(main, 2, NULL);
 	}
-	else if (str[*i] == '|')
-		add_node(main, 4, NULL);
-	else if (str[*i] == '$')
-	{
-		if (str[*i + 1] == '?')
-			add_node(main, 5, NULL);
-		else if (!ft_isspace(str[*i + 1]))
-		{
-			j = *i;
-			add_node(main, 6, NULL);
-			*i = skip_to_space(str, *i);
-			comlist_last(*main)->str = ft_substr(str, j, *i - j + 1);
-		}
-	}
 	else
-		ccont_split(str, i, main);
+		cont_split_plus(str, i, main);
 }
 
 t_comlist	*ms_split(char *str)

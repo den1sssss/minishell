@@ -12,6 +12,7 @@
 
 SRCS		=	splitter_one.c \
 				splitter_two.c \
+				splitter_three.c \
 				main.c \
 				signals.c \
 				parser.c \

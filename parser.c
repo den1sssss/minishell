@@ -27,10 +27,13 @@ char	**list_to_arr(t_comlist *list)
 
 	i = 0;
 	tmp = list;
-	while (tmp && tmp->type != 4)
+	if (tmp)
 	{
-		i++;
-		tmp = tmp->next;
+		while (tmp && tmp->type != 4)
+		{
+			i++;
+			tmp = tmp->next;
+		}
 	}
 	arr = (char **)malloc(sizeof(char *) * (i + 1));
 	i = 0;
